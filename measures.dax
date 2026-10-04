@@ -1,0 +1,120 @@
+// ============================================================================
+// Bio-Medical Waste Dashboard: DAX measures
+// Table name assumed: bmw   (load data/bmw_clean.csv and rename the query to "bmw")
+// Create a measure table first: Home > Enter data > name it "_Measures", then
+// paste each measure below via New measure.
+// ============================================================================
+
+// ---------- Base sums --------------------------------------------------------
+
+Total Generated (kg/day) = SUM ( bmw[waste_generated_kg_day] )
+
+Total Treated (kg/day) = SUM ( bmw[waste_treated_kg_day] )
+
+Total CBWTFs = SUM ( bmw[cbwtfs] )
+
+Total Beds = SUM ( bmw[beds] )
+
+Total HCFs = SUM ( bmw[healthcare_facilities] )
+
+Total Captive Plants = SUM ( bmw[captive_plants] )
+
+// Tonnes are easier to read on KPI cards
+Total Generated (t/day) = DIVIDE ( [Total Generated (kg/day)], 1000 )
+
+Total Treated (t/day) = DIVIDE ( [Total Treated (kg/day)], 1000 )
+
+
+// ---------- Core project measures -------------------------------------------
+
+// Treatment gap. Summed per state, so a state that over-reports treatment
+// (Manipur 2021) can't cancel out another state's real gap in the total.
+Treatment Gap (kg/day) =
+SUMX (
+    VALUES ( bmw[state] ),
+    VAR g = CALCULATE ( SUM ( bmw[waste_generated_kg_day] ) )
+    VAR t = CALCULATE ( SUM ( bmw[waste_treated_kg_day] ) )
+    RETURN MAX ( g - t, 0 )
+)
+
+// Format as Percentage, 1 decimal
+Treatment % = DIVIDE ( [Total Treated (kg/day)], [Total Generated (kg/day)] )
+
+// Blank (not infinity) for states with no CBWTF. Those are shown separately on Page 3
+Beds per CBWTF = DIVIDE ( [Total Beds], [Total CBWTFs] )
+
+// Format as decimal, 2 places. National figure is about 0.26 kg/bed/day
+// (non-bedded clinics' waste is included in the numerator)
+Waste per Bed (kg/day) = DIVIDE ( [Total Generated (kg/day)], [Total Beds] )
+
+// Waste load each CBWTF has to handle. This is closer to real capacity stress than beds
+Waste per CBWTF (kg/day) = DIVIDE ( [Total Generated (kg/day)], [Total CBWTFs] )
+
+
+// ---------- Year-aware helpers ----------------------------------------------
+
+// Latest year in the current filter context (KPI cards follow the year slicer)
+Selected Year = MAX ( bmw[year] )
+
+// Year-on-year change in generation (for the KPI card subtitle)
+Generated YoY % =
+VAR cur = [Total Generated (kg/day)]
+VAR prev =
+    CALCULATE ( [Total Generated (kg/day)], bmw[year] = [Selected Year] - 1, ALL ( bmw[year] ) )
+RETURN DIVIDE ( cur - prev, prev )
+
+// Number of years (in the selected range) a state reported a gap > 1 kg/day.
+// Persistence matters more than a single bad year.
+Years With Gap =
+SUMX (
+    VALUES ( bmw[year] ),
+    IF ( [Treatment Gap (kg/day)] > 1, 1, 0 )
+)
+
+
+// ---------- Page 3: where to build ------------------------------------------
+
+// National benchmark: beds per CBWTF over states that have at least one CBWTF.
+// Ignores the state filter so each state is compared to the same yardstick.
+National Beds per CBWTF =
+CALCULATE (
+    DIVIDE ( SUM ( bmw[beds] ), SUM ( bmw[cbwtfs] ) ),
+    ALL ( bmw[state] ),
+    bmw[cbwtfs] > 0
+)
+
+// How many CBWTFs the state "should" have at the national ratio
+Expected CBWTFs = DIVIDE ( [Total Beds], [National Beds per CBWTF] )
+
+// Positive = under-served (fewer facilities than its bed count implies).
+// This is the vertical distance below the trend line on the scatter.
+CBWTF Shortfall = [Expected CBWTFs] - [Total CBWTFs]
+
+// Simple priority score for the recommendation table (0-1 scaled pieces):
+// 50% capacity shortfall, 30% untreated waste, 20% persistence of the gap
+Priority Score =
+VAR maxShort =
+    MAXX ( ALL ( bmw[state] ), MAX ( [CBWTF Shortfall], 0 ) )
+VAR maxGap =
+    MAXX ( ALL ( bmw[state] ), [Treatment Gap (kg/day)] )
+VAR nYears = DISTINCTCOUNT ( bmw[year] )
+RETURN
+    0.5 * DIVIDE ( MAX ( [CBWTF Shortfall], 0 ), maxShort )
+        + 0.3 * DIVIDE ( [Treatment Gap (kg/day)], maxGap )
+        + 0.2 * DIVIDE ( [Years With Gap], nYears )
+
+
+// ---------- Formatting helpers ----------------------------------------------
+
+// Conditional-format colour for the map and bar chart (use Format > Fill > fx > Field value)
+Treatment Colour =
+SWITCH (
+    TRUE (),
+    ISBLANK ( [Treatment %] ), "#BDBDBD",
+    [Treatment %] >= 0.99, "#2E7D32",
+    [Treatment %] >= 0.90, "#F9A825",
+    "#C62828"
+)
+
+// Count of flagged rows in context. Show it as a small "data caveats" card
+Flagged Rows = CALCULATE ( COUNTROWS ( bmw ), NOT ISBLANK ( bmw[data_flag] ) )

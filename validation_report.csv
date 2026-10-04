@@ -1,0 +1,29 @@
+year,state,check,detail
+2020,Arunachal Pradesh,hcf_sum,136+98≠238
+2020,Jharkhand,treated_components,treated 8406.7317 vs captive+CBWTF 8880.90
+2020,Jammu & Kashmir,hcf_sum,1548+5373≠6904
+2020,Karnataka,hcf_sum,8404+32402≠41709
+2020,Lakshadweep,waste_per_bed_outlier,8.12 kg/bed/day
+2020,Mizoram,hcf_sum,64+77≠144
+2020,Sikkim,hcf_sum,34+241≠273
+2021,Manipur,treated>generated,1266.22 > 1166.13
+2022,Chhattisgarh,hcf_sum,2292+4280≠6705
+2022,Chhattisgarh,treated_components,treated 7504.9 vs captive+CBWTF 8210.89
+2022,Gujarat,hcf_sum,12422+23572≠35804
+2022,Jharkhand,hcf_sum,1368+1399≠2311
+2022,Karnataka,hcf_sum,8628+37765≠48431
+2022,Puducherry,treated_components,treated 4706.4 vs captive+CBWTF 4942.40
+2024,Lakshadweep,treated_components,treated 29.41 vs captive+CBWTF 41.83
+2024,Nagaland,treated_components,treated 999.45 vs captive+CBWTF 504.26
+2024,Punjab,treated_components,treated 26067.0 vs captive+CBWTF 26632.00
+2023,Bihar,carried_forward,beds 104943 & HCFs identical to 2022
+2023,DGAFMS (Armed Forces),carried_forward,beds 38640 & HCFs identical to 2022
+2022,Goa,generated_jump,"1,129 -> 2,128 kg/day (+89%)"
+2021,Kerala,generated_jump,"40,408 -> 61,136 kg/day (+51%)"
+2024,Kerala,generated_jump,"68,123 -> 96,774 kg/day (+42%)"
+2021,Lakshadweep,generated_jump,"1,137 -> 87 kg/day (-92%)"
+2024,Lakshadweep,carried_forward,beds 270 & HCFs identical to 2023
+2022,Manipur,carried_forward,beds 4854 & HCFs identical to 2021
+2022,Meghalaya,generated_jump,"1,287 -> 2,841 kg/day (+121%)"
+2024,Odisha,generated_jump,"12,239 -> 21,503 kg/day (+76%)"
+2021,Tripura,generated_jump,"3,853 -> 1,940 kg/day (-50%)"

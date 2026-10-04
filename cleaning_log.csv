@@ -1,0 +1,45 @@
+year,state,field,original,cleaned,fix_type,reason
+all,all,all,Nil / NIL / nil,0,rule,'Nil' in the report means none reported -> 0
+all,all,all,INP / NA / ask / M,blank,rule,"INP = information not provided, NA = not applicable; 'ask' and 'M' are placeholders left in the published tables -> blank (NULL), never 0"
+all,all,all,"1,23,456",123456,rule,Indian digit grouping removed
+all,all,all,state names,canonical,rule,Every year lists the same 37 entities in the same order; rows matched on serial no. and checked against the name text
+all,all,all,Jammu & Kashmir / Ladakh,kept separate,rule,"Split into two UTs on 31-Oct-2019, so all five years already report them separately"
+all,all,all,COVID-19 BMW row,excluded,rule,"2020 and 2021 Annexures add a national-only COVID-19 BMW line (118 and 80 t/day) with no state split. State rows are non-COVID only, so 2020-21 totals are 656.7 and 683.9 t/day, not the 774 and 764 t/day headline figures"
+all,all,all,Printed 'Total' rows,not used,rule,"Totals are recomputed from state rows. CPCB's printed bed totals omit Bihar in 2021 (-104,391) and Gujarat in 2022 (-223,997, the one cell stored as text '2,23,997')"
+all,all,all,Orissa,Odisha,rule,"Renamed in 2011; not present in 2020-24 tables, mapping kept for older reports"
+2020,Andaman & Nicobar Islands,state,Andaman Nicobar,Andaman & Nicobar Islands,name,Shortened name; official name is Andaman & Nicobar Islands
+2020,Dadra & Nagar Haveli and Daman & Diu,state,Dadra & Nagar Haveli,Dadra & Nagar Haveli and Daman & Diu,name,Report lists merged UT under old pre-2020 names
+2020,Dadra & Nagar Haveli and Daman & Diu,cbwtf_operational,Waste Handover to Gujarat Facility,0,value,"Text in numeric cell; waste handed to another state's CBWTF, so 0 own CBWTFs"
+2020,Jammu & Kashmir,state,J & K,Jammu & Kashmir,name,Abbreviation
+2020,Ladakh,total_hcf,,389,manual,"Cell missing in Annexure-I row; = bedded 333 + non-bedded 56, matches HCF table on p.9 and the printed national total"
+2020,Lakshadweep,cbwtf_operational,Waste handover to Image kerala,0,value,"Text in numeric cell; waste handed to another state's CBWTF, so 0 own CBWTFs"
+2020,Telangana,state,Telengana,Telangana,name,Misspelling in CPCB tables (all five years)
+2020,DGAFMS (Armed Forces),state,DGAFMS,DGAFMS (Armed Forces),name,"Armed Forces Medical Services: a national body, not a state. Kept for totals, is_mappable = FALSE"
+2021,Andaman & Nicobar Islands,state,Andaman Nicobar,Andaman & Nicobar Islands,name,Shortened name; official name is Andaman & Nicobar Islands
+2021,Dadra & Nagar Haveli and Daman & Diu,state,Dadra & Nagar Haveli,Dadra & Nagar Haveli and Daman & Diu,name,Report lists merged UT under old pre-2020 names
+2021,Dadra & Nagar Haveli and Daman & Diu,cbwtf_operational,,0,manual,"Cell blank; report says waste is handed over to a Gujarat CBWTF (same as 2020, 2022-24), so 0 own CBWTFs"
+2021,Jammu & Kashmir,state,J & K,Jammu & Kashmir,name,Abbreviation
+2021,Telangana,state,Telengana,Telangana,name,Misspelling in CPCB tables (all five years)
+2021,DGAFMS (Armed Forces),state,DGAFMS,DGAFMS (Armed Forces),name,"Armed Forces Medical Services: a national body, not a state. Kept for totals, is_mappable = FALSE"
+2022,Andaman & Nicobar Islands,state,Andaman Nicobar,Andaman & Nicobar Islands,name,Shortened name; official name is Andaman & Nicobar Islands
+2022,Dadra & Nagar Haveli and Daman & Diu,state,Daman &Diu and Dadra & Nagar Haveli,Dadra & Nagar Haveli and Daman & Diu,name,UTs merged on 26-Jan-2020 into 'Dadra & Nagar Haveli and Daman & Diu'; use the merged name
+2022,Dadra & Nagar Haveli and Daman & Diu,cbwtf_operational,Utilisi ng CBW TF of Gujar at,0,value,"Text in numeric cell; waste handed to another state's CBWTF, so 0 own CBWTFs"
+2022,Gujarat,beds,"2,23,997",223997.0,format,Indian digit grouping removed
+2022,Jammu & Kashmir,state,J & K,Jammu & Kashmir,name,Abbreviation
+2022,Kerala,treated_kg_day,29175,62122.15,manual,"Reported treated 29,175 contradicts the same row's breakdown (captive 2,372.15 + CBWTF 59,750 = 62,122.15) and 2021/2023 (~100% treated). Used the breakdown sum. Note: national total for 2022 will differ from CPCB's printed 645,411.85 by +32,947"
+2022,Tamil Nadu,beds,19114,,manual,"19,114 beds is a typo (145,848 in 2021; 204,717 in 2023). Set blank rather than guess; beds-per-CBWTF is blank for TN 2022"
+2022,Telangana,state,Telengana,Telangana,name,Misspelling in CPCB tables (all five years)
+2022,DGAFMS (Armed Forces),state,DGAFMS,DGAFMS (Armed Forces),name,"Armed Forces Medical Services: a national body, not a state. Kept for totals, is_mappable = FALSE"
+2023,Andaman & Nicobar Islands,state,Andaman Nicobar,Andaman & Nicobar Islands,name,Shortened name; official name is Andaman & Nicobar Islands
+2023,Dadra & Nagar Haveli and Daman & Diu,state,Daman &Diu and Dadra & Nagar Haveli,Dadra & Nagar Haveli and Daman & Diu,name,UTs merged on 26-Jan-2020 into 'Dadra & Nagar Haveli and Daman & Diu'; use the merged name
+2023,Dadra & Nagar Haveli and Daman & Diu,cbwtf_operational,Utilizing CBWTF of Gujarat,0,value,"Text in numeric cell; waste handed to another state's CBWTF, so 0 own CBWTFs"
+2023,Jammu & Kashmir,state,J & K,Jammu & Kashmir,name,Abbreviation
+2023,Telangana,state,Telengana,Telangana,name,Misspelling in CPCB tables (all five years)
+2023,DGAFMS (Armed Forces),state,DGAFMS,DGAFMS (Armed Forces),name,"Armed Forces Medical Services: a national body, not a state. Kept for totals, is_mappable = FALSE"
+2024,Arunachal Pradesh,treated_by_cbwtf_kg_day,INP,,missing,INP = information not provided
+2024,Dadra & Nagar Haveli and Daman & Diu,cbwtf_operational,CBWTF of,0,value,"Text in numeric cell; waste handed to another state's CBWTF, so 0 own CBWTFs"
+2024,Delhi,treated_by_cbwtf_kg_day,"33,100.45",33100.45,format,Indian digit grouping removed
+2024,Jammu & Kashmir,state,J & K,Jammu & Kashmir,name,Abbreviation
+2024,Jammu & Kashmir,hcf_with_captive,INP,,missing,INP = information not provided
+2024,Telangana,state,Telengana,Telangana,name,Misspelling in CPCB tables (all five years)
+2024,DGAFMS (Armed Forces),state,DGAFMS,DGAFMS (Armed Forces),name,"Armed Forces Medical Services: a national body, not a state. Kept for totals, is_mappable = FALSE"

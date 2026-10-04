@@ -1,0 +1,5 @@
+pdfplumber==0.11.10
+pandas>=2.0
+numpy
+openpyxl
+matplotlib>=3.7
